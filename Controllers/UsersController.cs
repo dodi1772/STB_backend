@@ -17,7 +17,7 @@ namespace STB_backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _supabaseClient.From<AppUser>().Get();
+            var users = await _supabaseClient.From<AppUser>().Where(u => !u.IsDeleted).Get();
             return Ok(users.Models);
         }
         [HttpPost]
@@ -41,11 +41,38 @@ namespace STB_backend.Controllers
             var response = await _supabaseClient.From<AppUser>().Insert(userToInsert);
             return Ok(response);
         }
-        [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromBody] UserUpdateDTO userDto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser([FromRoute] string id, [FromBody] UserUpdateDTO userDto)
         {
-            //
-            return Ok();
+            var userresponse = await _supabaseClient.From<AppUser>().Where(u => u.Id == id).Get();
+            var existingUser = userresponse.Models.FirstOrDefault();
+            if (existingUser==null || existingUser.IsDeleted)
+            {
+                return NotFound(new { message = "A keresett felhasználó nem található, vagy törölve lett." });
+            }
+            //felhasználó frissítése az adatbázisban
+            existingUser.FirstName = userDto.FirstName;
+            existingUser.LastName = userDto.LastName;
+            existingUser.PhoneNumber = userDto.PhoneNumber;
+            existingUser.UpdatedAt = DateTime.UtcNow;
+            var response = await _supabaseClient.From<AppUser>().Update(existingUser);
+            return Ok(response);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser([FromRoute] string id)
+        {
+            var userresponse = await _supabaseClient.From<AppUser>().Where(u => u.Id == id).Get();
+            var existingUser = userresponse.Models.FirstOrDefault();
+            if (existingUser == null || existingUser.IsDeleted)
+            {
+                return NotFound(new { message = "A keresett felhasználó nem található, vagy már törölve lett." });
+            }
+            //felhasználó törlése az adatbázisban
+            existingUser.IsDeleted = true;
+            existingUser.DeletedAt = DateTime.UtcNow;
+            existingUser.UpdatedAt = DateTime.UtcNow;
+            var response = await _supabaseClient.From<AppUser>().Update(existingUser);
+            return Ok(response);
         }
     }
 }

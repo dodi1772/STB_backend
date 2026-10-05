@@ -53,3 +53,4 @@ C:\Users\doddermann\source\repos\STB_backend\STB_backend\bin\Debug\net10.0\Swash
 C:\Users\doddermann\source\repos\STB_backend\STB_backend\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\doddermann\source\repos\STB_backend\STB_backend\bin\Debug\net10.0\Newtonsoft.Json.dll
 C:\Users\doddermann\source\repos\STB_backend\STB_backend\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
+C:\Users\doddermann\source\repos\STB_backend\STB_backend\obj\Debug\net10.0\STB_backend.sourcelink.json

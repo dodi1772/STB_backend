@@ -28,14 +28,14 @@ namespace STB_backend
         [Column("description")]
         public string? Description { get; set; }
         [Column("baseCreditPricePerHour")]
-        public int BaseCreditPricePerHour { get; set; }
+        public int baseCreditPricePerHour { get; set; }
         [Column("capacity")]
         public int Capacity { get; set; }
         [Column("isActive")]
         public bool IsActive { get; set; }
         [Column("isDeleted")]
         public bool IsDeleted { get; set; }
-        [Column("createdAt")]
-        public DateOnly CreatedAt { get; set; }
+        [Column("deletedAt")]
+        public DateTime? DeletedAt { get; set; }
     }
 }
